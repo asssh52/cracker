@@ -1,12 +1,13 @@
 #include "../hpp/hack.hpp"
 #include <sys/stat.h>
 
-#define NAME_LEN 30
+#define FILE_SIZE 464
 
 enum exits{
 
-    OK = 0,
-    FILE_NOT_FOUND = 1
+    OK              = 0,
+    FILE_NOT_FOUND  = 1,
+    WRONG_FILE      = 2
 
 };
 
@@ -22,6 +23,8 @@ int crackProgramm(const char* filename){
     if (!filePtr) return FILE_NOT_FOUND;
 
     size_t size = getFileSize(filename);
+    if (size != FILE_SIZE) return WRONG_FILE;
+
     char* buffer = (char*)calloc(size, sizeof(char));
 
     fread(buffer, sizeof(char), size, filePtr);

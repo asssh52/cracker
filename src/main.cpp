@@ -18,39 +18,28 @@ int main(int argc, const char* argv[])
     sf::Font font;
     printf("%d\n", font.loadFromFile("./misc/movistar.ttf"));
     sf::Text text;
-
-    // select the font
     text.setFont(font); // font is a sf::Font
-
-    // set the string to display
-    //text.setString("Hello world");
-
-    // set the character size
     text.setCharacterSize(24); // in pixels, not points!
 
-    // set the color
-    text.setFillColor(sf::Color::Red);
+    sf::RenderTexture image;
+    sf::Texture texture;
+    texture.loadFromFile("background.png");
+    sf::Sprite sprite(texture);
 
-//     while (window.isOpen())
-//     {
-//         sf::Event event;
-//         while (window.pollEvent(event))
-//         {
-//             if (event.type == sf::Event::Closed)
-//                 window.close();
-//         }
-//         // inside the main loop, between window.clear() and window.display()
-//
-//
-//         window.clear();
-//         window.draw(text);
-//         window.display();
-//     }
+
+    sf::Text help;
+    help.setFont(font);
+    help.setCharacterSize(24);
+    help.setFillColor(sf::Color::White);
 
     sf::Event event;
     sf::String userInput;
 
-    text.setPosition(60,300);
+    text.setPosition(60, 300);
+    help.setPosition(60, 200);
+
+    sf::String helpString = "Enter filename to continue.";
+    help.setString(helpString);
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -75,13 +64,17 @@ int main(int argc, const char* argv[])
                     printf("err:%d\n", err);
 
                     userInput.clear();
-                    text.setString("meow");
+                    if      (err == 1) text.setString("Wrong file link.");
+                    else if (err == 2) text.setString("This file is not supported.");
+                    else if (err == 0) text.setString("Success.");
                 }
             }
             if (event.type == sf::Event::Closed) window.close();
         }
         window.clear();
+        window.draw(sprite);
         window.draw(text);
+        window.draw(help);
         window.display();
     }
 
